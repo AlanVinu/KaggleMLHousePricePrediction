@@ -75,3 +75,29 @@ forest_model = RandomForestRegressor(random_state = 1)
 forest_model.fit(train_X, train_y)
 melb_preds = forest_model.predict(val_X)
 print(mean_absolute_error(val_y, melb_preds))
+
+#We can use RandomForest to predict the house prices of the test data
+#loading the training data
+train = pd.read_csv('train.csv')
+#now the testing data
+test = pd.read_csv('test.csv')
+
+train.columns
+
+#set the traget(y) and predictors
+train_y = train.SalePrice
+predictor_cols = ['LotArea', 'OverallQual', 'YearBuilt', 'TotRmsAbvGrd']
+
+#training predictors
+train_X = train[predictor_cols]
+
+my_model = RandomForestRegressor()
+my_model.fit(train_X, train_y)
+
+#now testing data
+test_X = test[predictor_cols]
+predicted_prices = my_model.predict(test_X)
+
+#output
+my_submission = pd.DataFrame({'Id': test.Id, 'SalePrice': predicted_prices })
+my_submission.to_csv('output.csv', index=False)
